@@ -22,11 +22,12 @@ PImage treeIntersect;
 PImage treeMiddle;
 PImage treeEndEast;
 PImage treeEndWest;
+PImage bridge;
 
 PImage map;
 
 int gridSize = 16;
-float zoom = 1.25;
+float zoom = 2;
 boolean upkey, downkey, leftkey, spacekey, rightkey, wkey, akey, skey, dkey, ekey, qkey;
 
 void setup() {
@@ -69,6 +70,9 @@ void loadImages() {
 
   treeEndWest = loadImage("treetop_w.png");
   treeEndWest.resize(gridSize, gridSize);
+  
+  bridge = loadImage("bridge.png");
+  bridge.resize(gridSize, gridSize);
 }
 
 void loadWorld(PImage img) {
@@ -143,7 +147,7 @@ void loadWorld(PImage img) {
     text("Player x:" + player.getX(), 50, 50);
     text("Player y:" + player.getY(), 50, 100);
     pushMatrix();
-    translate(-player.getX() * zoom + width/2, -player.getY() * zoom + height/2);
+    translate(-player.getX() * zoom + width/2 , -player.getY() * zoom + height/2);
     scale(zoom);
     world.step();
     world.draw();

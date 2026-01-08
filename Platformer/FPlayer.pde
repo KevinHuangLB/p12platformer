@@ -1,7 +1,8 @@
-class FPlayer extends FBox {
+class FPlayer extends FGameObject {
   FPlayer() {
-    super(16, 16);
+    super();
     setPosition(20, 400);
+    setName("player");
     setFillColor(red);
     setFriction(1);
     setRotatable(false);
@@ -11,7 +12,9 @@ class FPlayer extends FBox {
 
   void act() {
     handleInput();
-    checkForCollisions();
+    if (isTouching("spike")) {
+    setPosition(20,560);
+  }
   }
 
   void handleInput() {
@@ -33,13 +36,4 @@ class FPlayer extends FBox {
     return false;
   }
 
-  void checkForCollisions() {
-    ArrayList<FContact> contacts = getContacts();
-    for (int i = 0; i < contacts.size(); i++) {
-      FContact fc = contacts.get(i);
-      if (fc.contains("spike")) {
-        setPosition(20, 560);
-      }
-    }
-  }
 }
