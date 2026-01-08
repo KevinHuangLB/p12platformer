@@ -1,6 +1,8 @@
 import fisica.*;
 FWorld world;
 FPlayer player;
+ArrayList<FGameObject> terrain;
+
 color white = #FFFFFF;
 color black = #000000;
 color brown = #996633;
@@ -36,6 +38,9 @@ void setup() {
   world = new FWorld(-2000, -2000, 2000, 2000);
   world.setGravity(0, 900);
   map = loadImage("map.png");
+
+  terrain = new ArrayList<FGameObject>();
+
   loadImages();
   loadWorld(map);
 
@@ -70,7 +75,7 @@ void loadImages() {
 
   treeEndWest = loadImage("treetop_w.png");
   treeEndWest.resize(gridSize, gridSize);
-  
+
   bridge = loadImage("bridge.png");
   bridge.resize(gridSize, gridSize);
 }
@@ -121,7 +126,6 @@ void loadWorld(PImage img) {
       } else if (c == treeGreen && s == treeBrown) {
         b.attachImage(treeIntersect);
         b.setFriction(0);
-        b.setSensor(true);
         b.setName("treetop");
         world.add(b);
       } else if (c == treeGreen && w == treeGreen && e == treeGreen) {
@@ -136,21 +140,36 @@ void loadWorld(PImage img) {
         b.attachImage(treeEndEast);
         b.setName("treetop");
         world.add(b);
+      } else if (c == purple) {
+        FBridge br = new FBridge(x * gridSize, y * gridSize);
+        terrain.add(br);
+        world.add(br);
       }
     }
   }
 }
 
-  void draw() {
-    background(white);
-    fill(black);
-    text("Player x:" + player.getX(), 50, 50);
-    text("Player y:" + player.getY(), 50, 100);
-    pushMatrix();
-    translate(-player.getX() * zoom + width/2 , -player.getY() * zoom + height/2);
-    scale(zoom);
-    world.step();
-    world.draw();
-    popMatrix();
-    player.act();
+void draw() {
+  background(black);
+  text("Player x:" + player.getX(), 50, 50);
+  text("Player y:" + player.getY(), 50, 100);
+  drawWorld();
+  actWorld();
+}
+
+void drawWorld() {
+  pushMatrix();
+  translate(-player.getX() * zoom + width/2, -player.getY() * zoom + height/2);
+  scale(zoom);
+  world.step();
+  world.draw();
+  popMatrix();
+}
+
+void actWorld() {
+  player.act();
+  for (int i = 0; i < terrain.size(); i++) {
+    FGameObject t = terrain.get(i);
+    t.act();
   }
+}

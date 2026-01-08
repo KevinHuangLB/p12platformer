@@ -11,6 +11,7 @@ class FBridge extends FGameObject {
   void act() {
     if (isTouching("player")) {
       setStatic(false);
+      setSensor(true);
     }
   }
 }
