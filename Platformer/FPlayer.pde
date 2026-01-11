@@ -1,7 +1,7 @@
 class FPlayer extends FGameObject {
   FPlayer() {
     super();
-    setPosition(20, 400);
+    setPosition(20, 0);
     setName("player");
     setFillColor(red);
     setFriction(1);
@@ -12,28 +12,31 @@ class FPlayer extends FGameObject {
 
   void act() {
     handleInput();
-    if (isTouching("spike")) {
-    setPosition(20,560);
-  }
+    if (isTouching("spike") || isTouching("lava")) {
+      setPosition(20, 6);
+    }
   }
 
   void handleInput() {
     float vx = getVelocityX();
     float vy = getVelocityY();
-    if (akey) setVelocity(-250, vy);
-    if (dkey) setVelocity(250, vy);
-    if (spacekey && isTouching("stone", "ice", "tramp")) setVelocity(vx, -150);
+    if (akey) setVelocity(-200, vy);
+    if (dkey) setVelocity(200, vy);
+    if (spacekey) setVelocity(vx, -200);
+    if (spacekey && akey) setVelocity(-200,-200);
+        if (spacekey && dkey) setVelocity(200,-200);
   }
+  
+  // stop double jumping below
 
-  boolean isTouching(String stone, String ice, String tramp) {
-    ArrayList<FContact> contacts = getContacts();
-    for (int i = 0; i < contacts.size(); i++) {
-      FContact fc = contacts.get(i);
-      if (fc.contains(stone)) return true;
-      if (fc.contains(ice)) return true;
-      if (fc.contains(tramp)) return true;
-    }
-    return false;
-  }
-
+  //boolean isTouching(String stone, String ice, String tramp) { 
+  //  ArrayList<FContact> contacts = getContacts();
+  //  for (int i = 0; i < contacts.size(); i++) {
+  //    FContact fc = contacts.get(i);
+  //    if (fc.contains(stone)) return true;
+  //    if (fc.contains(ice)) return true;
+  //    if (fc.contains(tramp)) return true;
+  //  }
+  //  return false;
+  //}
 }

@@ -1,3 +1,5 @@
+import processing.javafx.*;
+
 import fisica.*;
 FWorld world;
 FPlayer player;
@@ -14,6 +16,7 @@ color trampPink = #FF00DC;
 color treeBrown = #964B00;
 color treeGreen = #2D9900;
 color purple = #B200FF;
+color orange = #FF6A00;
 
 PImage stone;
 PImage ice;
@@ -28,12 +31,18 @@ PImage bridge;
 
 PImage map;
 
+PImage[] lava;
+int numLavaFrames;
+int lavaFrame;
+
 int gridSize = 16;
 float zoom = 2;
 boolean upkey, downkey, leftkey, spacekey, rightkey, wkey, akey, skey, dkey, ekey, qkey;
 
 void setup() {
-  size(800, 800);
+  size(800, 800, FX2D);
+  frameRate(60);
+
   Fisica.init(this);
   world = new FWorld(-2000, -2000, 2000, 2000);
   world.setGravity(0, 900);
@@ -41,6 +50,19 @@ void setup() {
 
   terrain = new ArrayList<FGameObject>();
 
+  // GIF VARIABLES
+  numLavaFrames = 6;
+  lava = new PImage[numLavaFrames];
+  //lavaFrame = int(random(0, 6));
+
+  int i = 0;
+  while (i < numLavaFrames) {
+    lava[i] = loadImage("lava" + i + ".png");
+    lava[i].resize(gridSize, gridSize);
+    i++;
+  }
+
+  // loading texture images
   loadImages();
   loadWorld(map);
 
@@ -95,10 +117,10 @@ void loadWorld(PImage img) {
       FBox b = new FBox(gridSize, gridSize);
       b.setPosition(x * gridSize, y * gridSize);
       b.setStatic(true);
+      b.setFriction(2);
 
       if (c == black) {
         b.attachImage(stone);
-        b.setFriction(14);
         b.setName("stone");
         world.add(b);
       } else if (c == iceBlue) {
@@ -108,24 +130,20 @@ void loadWorld(PImage img) {
         world.add(b);
       } else if (c == trampPink) {
         b.attachImage(tramp);
-        b.setFriction(14);
-        b.setRestitution(3);
+        b.setRestitution(1.5);
         b.setName("tramp");
         world.add(b);
       } else if (c == red) {
         b.attachImage(spike);
-        b.setFriction(0);
         b.setName("spike");
         world.add(b);
       } else if (c == treeBrown) {
         b.attachImage(treeLog);
-        b.setFriction(0);
         b.setSensor(true);
         b.setName("treeLog");
         world.add(b);
       } else if (c == treeGreen && s == treeBrown) {
         b.attachImage(treeIntersect);
-        b.setFriction(0);
         b.setName("treetop");
         world.add(b);
       } else if (c == treeGreen && w == treeGreen && e == treeGreen) {
@@ -144,6 +162,10 @@ void loadWorld(PImage img) {
         FBridge br = new FBridge(x * gridSize, y * gridSize);
         terrain.add(br);
         world.add(br);
+      } else if (c == orange) {
+        FLava lv = new FLava(x * gridSize, y * gridSize, int(random(0,6)));
+        terrain.add(lv);
+        world.add(lv);
       }
     }
   }
@@ -153,6 +175,7 @@ void draw() {
   background(black);
   text("Player x:" + player.getX(), 50, 50);
   text("Player y:" + player.getY(), 50, 100);
+
   drawWorld();
   actWorld();
 }
@@ -161,6 +184,7 @@ void drawWorld() {
   pushMatrix();
   translate(-player.getX() * zoom + width/2, -player.getY() * zoom + height/2);
   scale(zoom);
+
   world.step();
   world.draw();
   popMatrix();
