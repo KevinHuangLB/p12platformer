@@ -31,9 +31,16 @@ PImage bridge;
 
 PImage map;
 
+// Lava
 PImage[] lava;
 int numLavaFrames;
 int lavaFrame;
+
+// Character
+PImage[] idle;
+PImage[] jump;
+PImage[] run;
+PImage[] action;
 
 int gridSize = 16;
 float zoom = 2;
@@ -53,16 +60,9 @@ void setup() {
   // GIF VARIABLES
   numLavaFrames = 6;
   lava = new PImage[numLavaFrames];
-  //lavaFrame = int(random(0, 6));
-
-  int i = 0;
-  while (i < numLavaFrames) {
-    lava[i] = loadImage("lava" + i + ".png");
-    lava[i].resize(gridSize, gridSize);
-    i++;
-  }
 
   // loading texture images
+  action = idle;
   loadImages();
   loadWorld(map);
 
@@ -71,6 +71,28 @@ void setup() {
 }
 
 void loadImages() {
+
+  //loading the action
+  idle = new PImage[2];
+  idle[0] = loadImage("idle0.png");
+  idle[1] = loadImage("idle1.png");
+  
+  jump = new PImage[1];
+  jump[0] = loadImage("jump0.png");
+  
+  run = new PImage[3];
+  run[0] = loadImage("runright0.png");
+  run[1] = loadImage("runright1.png");
+  run[2] = loadImage("runright2.png");
+
+  // loading lava
+  int i = 0;
+  while (i < numLavaFrames) {
+    lava[i] = loadImage("lava" + i + ".png");
+    lava[i].resize(gridSize, gridSize);
+    i++;
+  }
+
   stone = loadImage("stone.png");
   stone.resize(gridSize, gridSize);
 
@@ -163,7 +185,7 @@ void loadWorld(PImage img) {
         terrain.add(br);
         world.add(br);
       } else if (c == orange) {
-        FLava lv = new FLava(x * gridSize, y * gridSize, int(random(0,6)));
+        FLava lv = new FLava(x * gridSize, y * gridSize, int(random(0, 6)));
         terrain.add(lv);
         world.add(lv);
       }
