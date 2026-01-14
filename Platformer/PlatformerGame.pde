@@ -4,6 +4,7 @@ import fisica.*;
 FWorld world;
 FPlayer player;
 ArrayList<FGameObject> terrain;
+ArrayList<FGameObject> enemies;
 
 color white = #FFFFFF;
 color black = #000000;
@@ -17,6 +18,9 @@ color treeBrown = #964B00;
 color treeGreen = #2D9900;
 color purple = #B200FF;
 color orange = #FF6A00;
+color yellow = #FFD800;
+color gray = #808080;
+color lightGray = #A0A0A0;
 
 PImage stone;
 PImage ice;
@@ -42,8 +46,15 @@ PImage[] jump;
 PImage[] run;
 PImage[] action;
 
-int gridSize = 16;
-float zoom = 2;
+// Goomba
+PImage[] goomba;
+
+// Thwomp
+PImage[] thwomp;
+
+
+int gridSize = 32;
+float zoom = 1.5;
 boolean upkey, downkey, leftkey, spacekey, rightkey, wkey, akey, skey, dkey, ekey, qkey;
 
 void setup() {
@@ -51,11 +62,12 @@ void setup() {
   frameRate(60);
 
   Fisica.init(this);
-  world = new FWorld(-2000, -2000, 2000, 2000);
+  world = new FWorld(-5000, -5000, 5000, 5000);
   world.setGravity(0, 900);
   map = loadImage("map.png");
 
   terrain = new ArrayList<FGameObject>();
+  enemies = new ArrayList<FGameObject>();
 
   // GIF VARIABLES
   numLavaFrames = 6;
@@ -72,14 +84,28 @@ void setup() {
 
 void loadImages() {
 
+  //loading thwomp
+  thwomp = new PImage[2];
+  thwomp[0] = loadImage("thwomp0.png");
+  thwomp[0].resize(gridSize, gridSize);
+  thwomp[1] = loadImage("thwomp1.png");
+  thwomp[1].resize(gridSize, gridSize);
+
+  // loading goomba
+  goomba = new PImage[2];
+  goomba[0] = loadImage("goomba0.png");
+  goomba[0].resize(gridSize, gridSize);
+  goomba[1] = loadImage("goomba1.png");
+  goomba[1].resize(gridSize, gridSize);
+
   //loading the action
   idle = new PImage[2];
   idle[0] = loadImage("idle0.png");
   idle[1] = loadImage("idle1.png");
-  
+
   jump = new PImage[1];
   jump[0] = loadImage("jump0.png");
-  
+
   run = new PImage[3];
   run[0] = loadImage("runright0.png");
   run[1] = loadImage("runright1.png");
@@ -92,6 +118,8 @@ void loadImages() {
     lava[i].resize(gridSize, gridSize);
     i++;
   }
+
+  //loading goomba
 
   stone = loadImage("stone.png");
   stone.resize(gridSize, gridSize);
@@ -125,7 +153,7 @@ void loadImages() {
 }
 
 void loadWorld(PImage img) {
-  world = new FWorld(-2000, -2000, 2000, 2000);
+  world = new FWorld(-5000, -5000, 5000, 5000);
   world.setGravity(0, 900);
 
   for (int y = 0; y < img.height; y++) {
@@ -144,6 +172,10 @@ void loadWorld(PImage img) {
       if (c == black) {
         b.attachImage(stone);
         b.setName("stone");
+        world.add(b);
+      } else if (c == gray) {
+        b.attachImage(stone);
+        b.setName("wall");
         world.add(b);
       } else if (c == iceBlue) {
         b.attachImage(ice);
@@ -188,6 +220,14 @@ void loadWorld(PImage img) {
         FLava lv = new FLava(x * gridSize, y * gridSize, int(random(0, 6)));
         terrain.add(lv);
         world.add(lv);
+      } else if (c == yellow) {
+        FGoomba gmb = new FGoomba(x * gridSize, y * gridSize);
+        enemies.add(gmb);
+        world.add(gmb);
+      } else if (c = lightGray) {
+        FThwomp thw = new FThwomp(x * gridSize, y * gridSize);
+        enemies.add(thw);
+        world.add(thw);
       }
     }
   }
@@ -197,6 +237,7 @@ void draw() {
   background(black);
   text("Player x:" + player.getX(), 50, 50);
   text("Player y:" + player.getY(), 50, 100);
+  text("Player lives: " + player.lives, 50, 150);
 
   drawWorld();
   actWorld();
@@ -217,5 +258,10 @@ void actWorld() {
   for (int i = 0; i < terrain.size(); i++) {
     FGameObject t = terrain.get(i);
     t.act();
+  }
+
+  for (int i = 0; i < enemies.size(); i++) {
+    FGameObject e = enemies.get(i);
+    e.act();
   }
 }

@@ -2,16 +2,18 @@ class FPlayer extends FGameObject {
 
   int frame;
   int direction;
-  final int L = -1;
-  final int R = 1;
+  int lives;
 
   FPlayer() {
     super();
-    setPosition(20, 0);
+    frame = 0;
+    direction = R;
+    setPosition(35, 10);
     setName("player");
     setFillColor(red);
     setFriction(1);
     setRotatable(false);
+    lives = 3;
   }
   void show() {
   }
@@ -19,7 +21,8 @@ class FPlayer extends FGameObject {
   void act() {
     input();
     if (isTouching("spike") || isTouching("lava")) {
-      setPosition(20, 6);
+      setPosition(35, 10);
+      lives--;
     }
     collisions();
     animate();
@@ -34,24 +37,24 @@ class FPlayer extends FGameObject {
     }
 
     if (akey) {
-      setVelocity(-200, vy);
+      setVelocity(-250, vy);
       action = run;
       direction = L;
     }
     if (dkey) {
-      setVelocity(200, vy);
+      setVelocity(250, vy);
       action = run;
       direction = R;
     }
     if (spacekey) {
-      setVelocity(vx, -200);
+      setVelocity(vx, -250);
     }
     if (spacekey && akey) {
-      setVelocity(-200, -200);
+      setVelocity(-250, -250);
       direction = L;
     }
     if (spacekey && dkey) {
-      setVelocity(200, -200);
+      setVelocity(250, -250);
       direction = R;
     }
     if (abs(vy) > 0.1) {
