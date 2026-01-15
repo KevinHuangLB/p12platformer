@@ -1,13 +1,13 @@
-class FGoomba extends FGameObject {
+class FHammerBro extends FGameObject {
 
   int direction = L;
   int speed = 50;
   int frame = 0;
 
-  FGoomba(float x, float y) {
+  FHammerBro(float x, float y) {
     super();
     setPosition(x, y);
-    setName("Goomba");
+    setName("HammerBro");
     setRotatable(false);
   }
 
@@ -15,13 +15,14 @@ class FGoomba extends FGameObject {
     animate();
     collide();
     move();
+    throwHammer();
   }
 
   void animate() {
-    if (frame >= goomba.length) frame = 0;
+    if (frame >= hammerbro.length) frame = 0;
     if (frameCount % 5 == 0) {
-      if (direction == R) attachImage(goomba[frame]);
-      if (direction == L) attachImage(reverseImage(goomba[frame]));
+      if (direction == R) attachImage(hammerbro[frame]);
+      if (direction == L) attachImage(reverseImage(hammerbro[frame]));
       frame++;
     }
   }
@@ -38,7 +39,7 @@ class FGoomba extends FGameObject {
         player.setVelocity(player.getVelocityX(), -350);
       } else {
         player.lives--;
-        player.setPosition(35,10);
+        player.setPosition(35, 10);
       }
     }
   }
@@ -46,5 +47,19 @@ class FGoomba extends FGameObject {
   void move() {
     float vy = getVelocityY();
     setVelocity(speed * direction, vy);
+  }
+
+  void throwHammer() {
+    if (frameCount % 90 == 0) {
+      FBox fb = new FBox(gridSize, gridSize);
+      fb.setName("hammer");
+      fb.setPosition(getX(), getY());
+      fb.attachImage(hammer);
+      if (direction == R) fb.setVelocity(300, -300);
+      if (direction == L) fb.setVelocity(-300,-300);
+      fb.setAngularVelocity(20);
+      fb.setSensor(true);
+      world.add(fb);
+    }
   }
 }

@@ -21,6 +21,7 @@ color orange = #FF6A00;
 color yellow = #FFD800;
 color gray = #808080;
 color lightGray = #C0C0C0;
+color darkBlue = #0026FF;
 
 PImage stone;
 PImage ice;
@@ -32,6 +33,9 @@ PImage treeMiddle;
 PImage treeEndEast;
 PImage treeEndWest;
 PImage bridge;
+
+//hammer bro hammer
+PImage hammer;
 
 PImage map;
 
@@ -51,6 +55,9 @@ PImage[] goomba;
 
 // Thwomp
 PImage[] thwomp;
+
+// Hammer Bro
+PImage[] hammerbro;
 
 
 int gridSize = 32;
@@ -84,12 +91,23 @@ void setup() {
 
 void loadImages() {
 
+  //loading hammerbro
+  hammerbro = new PImage[2];
+  hammerbro[0] = loadImage("hammerbro0.png");
+  hammerbro[0].resize(gridSize, gridSize);
+  hammerbro[1] = loadImage("hammerbro1.png");
+  hammerbro[1].resize(gridSize, gridSize);
+  
+  //loading hammer of hammerbro
+  hammer = loadImage("hammer.png");
+  hammer.resize(gridSize, gridSize);
+  
   //loading thwomp
   thwomp = new PImage[2];
   thwomp[0] = loadImage("thwomp0.png");
-  thwomp[0].resize(gridSize, gridSize);
+  thwomp[0].resize(gridSize * 2, gridSize * 2);
   thwomp[1] = loadImage("thwomp1.png");
-  thwomp[1].resize(gridSize, gridSize);
+  thwomp[1].resize(gridSize * 2, gridSize * 2);
 
   // loading goomba
   goomba = new PImage[2];
@@ -223,9 +241,14 @@ void loadWorld(PImage img) {
         enemies.add(gmb);
         world.add(gmb);
       } else if (c == lightGray) {
-        FThwomp thw = new FThwomp(x * gridSize, y * gridSize);
+        FThwomp thw = new FThwomp(x * gridSize, y * 1.5 * gridSize);
         enemies.add(thw);
         world.add(thw);
+      }
+      else if (c == darkBlue) {
+        FHammerBro hb = new FHammerBro(x * gridSize, y * gridSize);
+        enemies.add(hb);
+        world.add(hb);
       }
     }
   }

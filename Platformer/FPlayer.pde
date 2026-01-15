@@ -20,7 +20,7 @@ class FPlayer extends FGameObject {
 
   void act() {
     input();
-    if (isTouching("spike") || isTouching("lava")) {
+    if (isTouching("spike") || isTouching("lava") || isTouching("hammer")) {
       setPosition(35, 10);
       lives--;
     }
