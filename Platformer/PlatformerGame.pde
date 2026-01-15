@@ -20,7 +20,7 @@ color purple = #B200FF;
 color orange = #FF6A00;
 color yellow = #FFD800;
 color gray = #808080;
-color lightGray = #A0A0A0;
+color lightGray = #C0C0C0;
 
 PImage stone;
 PImage ice;
@@ -118,8 +118,6 @@ void loadImages() {
     lava[i].resize(gridSize, gridSize);
     i++;
   }
-
-  //loading goomba
 
   stone = loadImage("stone.png");
   stone.resize(gridSize, gridSize);
@@ -224,7 +222,7 @@ void loadWorld(PImage img) {
         FGoomba gmb = new FGoomba(x * gridSize, y * gridSize);
         enemies.add(gmb);
         world.add(gmb);
-      } else if (c = lightGray) {
+      } else if (c == lightGray) {
         FThwomp thw = new FThwomp(x * gridSize, y * gridSize);
         enemies.add(thw);
         world.add(thw);
@@ -239,8 +237,8 @@ void draw() {
   text("Player y:" + player.getY(), 50, 100);
   text("Player lives: " + player.lives, 50, 150);
 
-  drawWorld();
   actWorld();
+  drawWorld(); //order of these two were changed
 }
 
 void drawWorld() {
