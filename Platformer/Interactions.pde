@@ -5,6 +5,7 @@ void keyReleased() {
   if (key == 'D' || key == 'd') dkey = false;
   if (key == 'Q' || key == 'q') qkey = false;
   if (key == 'E' || key == 'e') ekey = false;
+  if (key == 'C' || key == 'c') ckey = false;
   if (key == ' ') spacekey = false;
   if (keyCode == DOWN) downkey = false;
   if (keyCode == UP) upkey = false;
@@ -19,6 +20,7 @@ void keyPressed() {
   if (key == 'D' || key == 'd') dkey = true;
   if (key == 'Q' || key == 'q') qkey = true;
   if (key == 'E' || key == 'e') ekey = true;
+  if (key == 'C' || key == 'c') ckey = true;
   if (key == ' ') spacekey = true;
   if (keyCode == DOWN) downkey = true;
   if (keyCode == UP) upkey = true;

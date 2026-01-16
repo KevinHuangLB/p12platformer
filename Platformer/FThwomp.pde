@@ -1,7 +1,7 @@
 class FThwomp extends FGameObject {
 
-  int speed;
-  boolean falling, rising;
+  int speed, cooldown;
+  boolean falling, rising, onCooldown;
 
   FThwomp(float x, float y) {
     super(2);
@@ -11,6 +11,7 @@ class FThwomp extends FGameObject {
     setRotatable(false);
     falling = false;
     rising = false;
+    cooldown = 41;
   }
 
   void act() {
@@ -20,10 +21,10 @@ class FThwomp extends FGameObject {
   }
 
   void animate() {
-    if (falling){
+    if (falling && !onCooldown) {
       attachImage(thwomp[1]);
-    } else{
-     attachImage(thwomp[0]); 
+    } else {
+      attachImage(thwomp[0]);
     }
   }
 
@@ -44,8 +45,14 @@ class FThwomp extends FGameObject {
     }
     if (falling) {
       if (isTouching("wall")) {
-        rising = true;
-        falling = false;
+        onCooldown = true;
+        cooldown--;
+        if (cooldown < 0) {
+          rising = true;
+          falling = false;
+          onCooldown = false;
+          cooldown = 41;
+        }
       }
       //if (!(abs(player.getX() - getX()) < gridSize)) { DETECTION FOR BACKING OUT IF PLAYER NO LONGER UNDER
       //  falling = false;

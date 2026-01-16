@@ -6,6 +6,9 @@ FPlayer player;
 ArrayList<FGameObject> terrain;
 ArrayList<FGameObject> enemies;
 
+// checkpoint variables
+float checkpointX, checkpointY;
+
 color white = #FFFFFF;
 color black = #000000;
 color brown = #996633;
@@ -16,12 +19,13 @@ color iceBlue = #00FFFF;
 color trampPink = #FF00DC;
 color treeBrown = #964B00;
 color treeGreen = #2D9900;
-color purple = #B200FF;
-color orange = #FF6A00;
-color yellow = #FFD800;
-color gray = #808080;
-color lightGray = #C0C0C0;
-color darkBlue = #0026FF;
+color purple = #B200FF; //bridge
+color orange = #FF6A00; // lava
+color yellow = #FFD800; // goomba
+color gray = #808080; // wall
+color lightGray = #C0C0C0; //thwomp
+color darkBlue = #0026FF; //hammer bro
+color lightGreen = #00FF21; // checkpoints
 
 PImage stone;
 PImage ice;
@@ -33,6 +37,7 @@ PImage treeMiddle;
 PImage treeEndEast;
 PImage treeEndWest;
 PImage bridge;
+PImage checkpoint;
 
 //hammer bro hammer
 PImage hammer;
@@ -62,7 +67,7 @@ PImage[] hammerbro;
 
 int gridSize = 32;
 float zoom = 1.5;
-boolean upkey, downkey, leftkey, spacekey, rightkey, wkey, akey, skey, dkey, ekey, qkey;
+boolean upkey, downkey, leftkey, spacekey, rightkey, wkey, akey, skey, dkey, ekey, ckey, qkey;
 
 void setup() {
   size(800, 800, FX2D);
@@ -75,6 +80,10 @@ void setup() {
 
   terrain = new ArrayList<FGameObject>();
   enemies = new ArrayList<FGameObject>();
+  
+  //checkpoint variables
+  checkpointX = 35;
+  checkpointY = 10;
 
   // GIF VARIABLES
   numLavaFrames = 6;
@@ -91,17 +100,21 @@ void setup() {
 
 void loadImages() {
 
+  //loading checkpoint
+  checkpoint = loadImage("checkpoint.png");
+  checkpoint.resize(gridSize, gridSize);
+
   //loading hammerbro
   hammerbro = new PImage[2];
   hammerbro[0] = loadImage("hammerbro0.png");
   hammerbro[0].resize(gridSize, gridSize);
   hammerbro[1] = loadImage("hammerbro1.png");
   hammerbro[1].resize(gridSize, gridSize);
-  
+
   //loading hammer of hammerbro
   hammer = loadImage("hammer.png");
   hammer.resize(gridSize, gridSize);
-  
+
   //loading thwomp
   thwomp = new PImage[2];
   thwomp[0] = loadImage("thwomp0.png");
@@ -244,15 +257,20 @@ void loadWorld(PImage img) {
         FThwomp thw = new FThwomp(x * gridSize, y * 1.5 * gridSize);
         enemies.add(thw);
         world.add(thw);
-      }
-      else if (c == darkBlue) {
+      } else if (c == darkBlue) {
         FHammerBro hb = new FHammerBro(x * gridSize, y * gridSize);
         enemies.add(hb);
         world.add(hb);
+      } else if (c == lightGreen) {
+        FCheckpoint cp = new FCheckpoint(x * gridSize, y * gridSize);
+        terrain.add(cp);
+        world.add(cp);
       }
     }
   }
 }
+
+
 
 void draw() {
   background(black);

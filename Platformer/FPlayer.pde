@@ -21,7 +21,7 @@ class FPlayer extends FGameObject {
   void act() {
     input();
     if (isTouching("spike") || isTouching("lava") || isTouching("hammer")) {
-      setPosition(35, 10);
+      setPosition(checkpointX, checkpointY);
       lives--;
     }
     collisions();
