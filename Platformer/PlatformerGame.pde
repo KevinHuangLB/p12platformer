@@ -9,6 +9,15 @@ ArrayList<FGameObject> enemies;
 // checkpoint variables
 float checkpointX, checkpointY;
 
+// switchblock variables
+int effect;
+final int jump = 1;
+final int speed = 2;
+final int death = 3;
+
+// switchBLock effect variables
+int jumpBoost, speedBoost;
+
 color white = #FFFFFF;
 color black = #000000;
 color brown = #996633;
@@ -39,7 +48,6 @@ PImage treeEndEast;
 PImage treeEndWest;
 PImage bridge;
 PImage checkpoint;
-PImage switchBlock;
 
 //hammer bro hammer
 PImage hammer;
@@ -54,7 +62,7 @@ int lavaFrame;
 // Character
 PImage[] shift;
 PImage[] idle;
-PImage[] jump;
+PImage[] jumping;
 PImage[] run;
 PImage[] action;
 
@@ -67,6 +75,8 @@ PImage[] thwomp;
 // Hammer Bro
 PImage[] hammerbro;
 
+// Switch block
+PImage[] switchBlock;
 
 int gridSize = 32;
 float zoom = 1.5;
@@ -88,6 +98,11 @@ void setup() {
   checkpointX = 35;
   checkpointY = 74;
 
+  // switch block effect variables
+  effect = 0;
+  jumpBoost = 0;
+  speedBoost = 0;
+
   // GIF VARIABLES
   numLavaFrames = 6;
   lava = new PImage[numLavaFrames];
@@ -104,8 +119,13 @@ void setup() {
 void loadImages() {
 
   //loading switch block
-  switchBlock = loadImage("switchblock.png");
-  switchBlock.resize(gridSize, gridSize);
+  switchBlock = new PImage[3];
+  switchBlock[0] = loadImage("switchblock0.png");
+  switchBlock[0].resize(gridSize, gridSize);
+  switchBlock[1] = loadImage("switchblock1.png");
+  switchBlock[1].resize(gridSize, gridSize);
+  switchBlock[2] = loadImage("switchblock2.png");
+  switchBlock[2].resize(gridSize, gridSize);
 
   //loading checkpoint
   checkpoint = loadImage("checkpoint.png");
@@ -145,8 +165,8 @@ void loadImages() {
   idle[0] = loadImage("idle0.png");
   idle[1] = loadImage("idle1.png");
 
-  jump = new PImage[1];
-  jump[0] = loadImage("jump0.png");
+  jumping = new PImage[1];
+  jumping[0] = loadImage("jump0.png");
 
   run = new PImage[3];
   run[0] = loadImage("runright0.png");

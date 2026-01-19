@@ -21,9 +21,10 @@ class FPlayer extends FGameObject {
 
   void act() {
     input();
-    if (isTouching("spike") || isTouching("lava") || isTouching("hammer")) {
+    if (isTouching("spike") || isTouching("lava") || isTouching("hammer") || effect == death) {
       setPosition(checkpointX, checkpointY - gridSize);
       setVelocity(0, 0);
+      effect = 0;
       newLife = true;
       lives--;
     } else {
@@ -47,24 +48,24 @@ class FPlayer extends FGameObject {
     }
 
     if (akey && !shiftkey) {
-      setVelocity(-225, vy);
+      setVelocity(-225 - speedBoost, vy);
       action = run;
       direction = L;
     }
     if (dkey && !shiftkey) {
-      setVelocity(225, vy);
+      setVelocity(225 + speedBoost, vy);
       action = run;
       direction = R;
     }
     if (spacekey && !shiftkey) {
-      setVelocity(vx, -225);
+      setVelocity(vx, -225 - jumpBoost);
     }
     if (spacekey && akey && !shiftkey) {
-      setVelocity(-225, -250);
+      setVelocity(-225 - speedBoost, -250 - jumpBoost);
       direction = L;
     }
     if (spacekey && dkey && !shiftkey) {
-      setVelocity(225, -250);
+      setVelocity(225 + speedBoost, -250 - jumpBoost);
       direction = R;
     }
     if (shiftkey && akey){
@@ -79,7 +80,7 @@ class FPlayer extends FGameObject {
       setVelocity(vx, -120);
     }
     if (abs(vy) > 0.1 && !shiftkey) {
-      action = jump;
+      action = jumping;
     }
   }
 
