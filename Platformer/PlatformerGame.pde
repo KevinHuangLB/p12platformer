@@ -26,6 +26,7 @@ color gray = #808080; // wall
 color lightGray = #C0C0C0; //thwomp
 color darkBlue = #0026FF; //hammer bro
 color lightGreen = #00FF21; // checkpoints
+color switchBlockBrown = #7F3300; // switch block
 
 PImage stone;
 PImage ice;
@@ -38,6 +39,7 @@ PImage treeEndEast;
 PImage treeEndWest;
 PImage bridge;
 PImage checkpoint;
+PImage switchBlock;
 
 //hammer bro hammer
 PImage hammer;
@@ -50,6 +52,7 @@ int numLavaFrames;
 int lavaFrame;
 
 // Character
+PImage[] shift;
 PImage[] idle;
 PImage[] jump;
 PImage[] run;
@@ -67,7 +70,7 @@ PImage[] hammerbro;
 
 int gridSize = 32;
 float zoom = 1.5;
-boolean upkey, downkey, leftkey, spacekey, rightkey, wkey, akey, skey, dkey, ekey, ckey, qkey;
+boolean upkey, downkey, leftkey, spacekey, rightkey, wkey, akey, skey, dkey, ekey, ckey, qkey, shiftkey;
 
 void setup() {
   size(800, 800, FX2D);
@@ -80,10 +83,10 @@ void setup() {
 
   terrain = new ArrayList<FGameObject>();
   enemies = new ArrayList<FGameObject>();
-  
+
   //checkpoint variables
   checkpointX = 35;
-  checkpointY = 10;
+  checkpointY = 74;
 
   // GIF VARIABLES
   numLavaFrames = 6;
@@ -99,6 +102,10 @@ void setup() {
 }
 
 void loadImages() {
+
+  //loading switch block
+  switchBlock = loadImage("switchblock.png");
+  switchBlock.resize(gridSize, gridSize);
 
   //loading checkpoint
   checkpoint = loadImage("checkpoint.png");
@@ -130,6 +137,10 @@ void loadImages() {
   goomba[1].resize(gridSize, gridSize);
 
   //loading the action
+  shift = new PImage[2];
+  shift[0] = loadImage("shift0.png");
+  shift[1] = loadImage("shift1.png");
+
   idle = new PImage[2];
   idle[0] = loadImage("idle0.png");
   idle[1] = loadImage("idle1.png");
@@ -265,6 +276,10 @@ void loadWorld(PImage img) {
         FCheckpoint cp = new FCheckpoint(x * gridSize, y * gridSize);
         terrain.add(cp);
         world.add(cp);
+      } else if (c == switchBlockBrown) {
+        FSwitchBlock sb = new FSwitchBlock(x * gridSize, y * gridSize);
+        terrain.add(sb);
+        world.add(sb);
       }
     }
   }
@@ -277,6 +292,7 @@ void draw() {
   text("Player x:" + player.getX(), 50, 50);
   text("Player y:" + player.getY(), 50, 100);
   text("Player lives: " + player.lives, 50, 150);
+  text("Spawnpoint " + checkpointX + ", " + checkpointY, 50, 200);
 
   actWorld();
   drawWorld(); //order of these two were changed

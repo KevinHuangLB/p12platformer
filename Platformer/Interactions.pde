@@ -11,6 +11,7 @@ void keyReleased() {
   if (keyCode == UP) upkey = false;
   if (keyCode == LEFT) leftkey = false;
   if (keyCode == RIGHT) rightkey = false;
+  if (keyCode == SHIFT) shiftkey = false;
 }
 
 void keyPressed() {
@@ -26,4 +27,5 @@ void keyPressed() {
   if (keyCode == UP) upkey = true;
   if (keyCode == LEFT) leftkey = true;
   if (keyCode == RIGHT) rightkey = true;
+  if (keyCode == SHIFT) shiftkey = true;
 }

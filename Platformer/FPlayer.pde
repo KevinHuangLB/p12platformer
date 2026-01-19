@@ -3,12 +3,13 @@ class FPlayer extends FGameObject {
   int frame;
   int direction;
   int lives;
+  boolean newLife;
 
   FPlayer() {
     super();
     frame = 0;
     direction = R;
-    setPosition(35, 10);
+    setPosition(35, 74);
     setName("player");
     setFillColor(red);
     setFriction(1);
@@ -21,8 +22,12 @@ class FPlayer extends FGameObject {
   void act() {
     input();
     if (isTouching("spike") || isTouching("lava") || isTouching("hammer")) {
-      setPosition(checkpointX, checkpointY);
+      setPosition(checkpointX, checkpointY - gridSize);
+      setVelocity(0, 0);
+      newLife = true;
       lives--;
+    } else {
+      newLife = false;
     }
     collisions();
     animate();
@@ -36,28 +41,44 @@ class FPlayer extends FGameObject {
       action = idle;
     }
 
-    if (akey) {
-      setVelocity(-250, vy);
+    if (shiftkey) {
+      action = shift;
+      setVelocity(0,vy + 60);
+    }
+
+    if (akey && !shiftkey) {
+      setVelocity(-225, vy);
       action = run;
       direction = L;
     }
-    if (dkey) {
-      setVelocity(250, vy);
+    if (dkey && !shiftkey) {
+      setVelocity(225, vy);
       action = run;
       direction = R;
     }
-    if (spacekey) {
-      setVelocity(vx, -250);
+    if (spacekey && !shiftkey) {
+      setVelocity(vx, -225);
     }
-    if (spacekey && akey) {
-      setVelocity(-250, -250);
+    if (spacekey && akey && !shiftkey) {
+      setVelocity(-225, -250);
       direction = L;
     }
-    if (spacekey && dkey) {
-      setVelocity(250, -250);
+    if (spacekey && dkey && !shiftkey) {
+      setVelocity(225, -250);
       direction = R;
     }
-    if (abs(vy) > 0.1) {
+    if (shiftkey && akey){
+      action = shift;
+      setVelocity(-125,vy + 30);
+    }
+    if (shiftkey && dkey){
+      action = shift;
+      setVelocity(125,vy + 30);
+    }
+    if (shiftkey && spacekey){
+      setVelocity(vx, -120);
+    }
+    if (abs(vy) > 0.1 && !shiftkey) {
       action = jump;
     }
   }
@@ -71,7 +92,7 @@ class FPlayer extends FGameObject {
       if (direction == R) {
         attachImage(action[frame]);
       }
-      if (direction == L){
+      if (direction == L) {
         attachImage(reverseImage(action[frame]));
       }
       frame++;
